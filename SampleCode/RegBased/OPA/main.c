@@ -118,7 +118,8 @@ void SYS_Init(void)
     GPIO_DISABLE_DIGITAL_PATH(P8, BIT1);
 
     /* Set P3 multi-function pins for UART0 RXD and TXD */
-    SYS->P3_MFP = SYS_MFP_P30_UART0_RXD | SYS_MFP_P31_UART0_TXD;
+    SYS->P3_MFP &= ~(SYS_MFP_P30_Msk | SYS_MFP_P31_Msk);
+		SYS->P3_MFP |= (SYS_MFP_P30_UART0_RXD | SYS_MFP_P31_UART0_TXD);
 }
 
 void UART_Init(void)

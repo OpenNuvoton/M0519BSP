@@ -238,10 +238,12 @@ void SYS_Init(void)
     /*---------------------------------------------------------------------------------------------------------*/
 
     /* Set P3 multi-function pins for UART0 RXD and TXD */
-    SYS->P3_MFP = SYS_MFP_P30_UART0_RXD | SYS_MFP_P31_UART0_TXD;
+    SYS->P3_MFP &= ~(SYS_MFP_P30_Msk | SYS_MFP_P31_Msk);
+    SYS->P3_MFP |= (SYS_MFP_P30_UART0_RXD | SYS_MFP_P31_UART0_TXD);
 
     /* Set SPI1 multi-function pins for SD card interface */
-    SYS->P9_MFP = (SYS_MFP_P97_SPI1_SS | SYS_MFP_P96_SPI1_MOSI | SYS_MFP_P95_SPI1_MISO | SYS_MFP_P94_SPI1_CLK);
+    SYS->P9_MFP &= ~(SYS_MFP_P97_Msk | SYS_MFP_P96_Msk | SYS_MFP_P95_Msk | SYS_MFP_P94_Msk);
+    SYS->P9_MFP |= (SYS_MFP_P97_SPI1_SS | SYS_MFP_P96_SPI1_MOSI | SYS_MFP_P95_SPI1_MISO | SYS_MFP_P94_SPI1_CLK);
 
 }
 

@@ -123,10 +123,11 @@ void SYS_Init(void)
     /*---------------------------------------------------------------------------------------------------------*/
 
     /* Set GP3 multi-function pins for UART0 RXD and TXD */
-    SYS->P3_MFP = SYS_MFP_P30_UART0_RXD | SYS_MFP_P31_UART0_TXD;
-
+    SYS->P3_MFP &= ~(SYS_MFP_P30_Msk | SYS_MFP_P31_Msk);
+    SYS->P3_MFP |= (SYS_MFP_P30_UART0_RXD | SYS_MFP_P31_UART0_TXD);
     /* Set P2.3 for ECAP0_IC0*/
-    SYS->P2_MFP = SYS_MFP_P23_ECAP0_IC0;
+    SYS->P2_MFP &= ~SYS_MFP_P23_Msk;
+    SYS->P2_MFP |= SYS_MFP_P23_ECAP0_IC0;
 
 }
 

@@ -15,7 +15,7 @@
 #define PLLCON_SETTING      CLK_PLLCON_72MHz_HXT
 #define PLL_CLOCK           72000000
 
-#if !defined(__ICCARM__)
+#if !defined(__ICCARM__) && !defined(__GNUC__)
 extern uint32_t Image$$RO$$Base;
 #endif
 
@@ -87,6 +87,8 @@ void UART0_Init(void)
 /*---------------------------------------------------------------------------------------------------------*/
 int32_t main(void)
 {
+    volatile uint32_t u32BootAddr;
+
     uint8_t ch;
     uint32_t u32Data;
     uint32_t u32Cfg;
@@ -127,7 +129,23 @@ int32_t main(void)
 
     printf("\nCPU @ %dHz\n\n", SystemCoreClock);
 
-#if defined(__ICCARM__)
+#if defined(__BASE__)
+    printf("Boot from 0\n");
+#endif
+#if defined(__BOOT0__)
+    printf("Boot from 0x1000\n");
+#endif
+#if defined(__BOOT1__)
+    printf("Boot from 0x2000\n");
+#endif
+#if defined(__BOOT2__)
+    printf("Boot from 0x3000\n");
+#endif
+#if defined(__BOOT3__)
+    printf("Boot from 0x4000\n");
+#endif
+
+#if defined(__ICCARM__) || defined(__GNUC__)
     printf("VECMAP = 0x%x\n", FMC_GetVECMAP());
 #else
     printf("Current RO Base = 0x%x, VECMAP = 0x%x\n", (uint32_t)&Image$$RO$$Base, FMC_GetVECMAP());
@@ -173,19 +191,19 @@ int32_t main(void)
     switch(ch)
     {
         case '0':
-            FMC_SetVectorPageAddr(0x1000);
+            u32BootAddr = 0x1000;
             break;
         case '1':
-            FMC_SetVectorPageAddr(0x2000);
+            u32BootAddr = 0x2000;
             break;
         case '2':
-            FMC_SetVectorPageAddr(0x3000);
+            u32BootAddr = 0x3000;
             break;
         case '3':
-            FMC_SetVectorPageAddr(0x4000);
+            u32BootAddr = 0x4000;
             break;
         default:
-            FMC_SetVectorPageAddr(0x0);
+            u32BootAddr = 0x0000;
             break;
     }
 

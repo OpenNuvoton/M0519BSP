@@ -89,10 +89,10 @@
  *----------------------------------------------------------*/
 
 /* Ensure stdint is only used by the compiler, and not the assembler. */
-#ifdef __ICCARM__
+//#ifdef (__ICCARM__) | (__GNUC__)
 #include <stdint.h>
 extern uint32_t SystemCoreClock;
-#endif
+//#endif
 
 #ifdef __ARMCC_VERSION
 #include "M0519.h"

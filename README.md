@@ -26,8 +26,6 @@ This BSP folder
 - StdDriver<br>
 	All peripheral driver header and source files.
 
-- ThirdParty<br>
-	Library from the third party.
 
 ## .\Sample Code\
 
@@ -37,6 +35,9 @@ This BSP folder
 
 - Hard\_Fault\_Sample<br>
 	Show hard fault information when hard fault happened.
+
+- ISP<br>
+	Sample codes for In-System-Programming.
 
 - Template<br>
 	Software Development Template.
@@ -50,6 +51,14 @@ This BSP folder
 - StdDriver<br>
 	M0519 Series Driver Samples
 
+## .\ThirdParty\
+
+
+- FATFS<br>
+	An open source FAT/exFAT filesystem library.
+
+- FreeRTOS<br>
+	FreeRTOS porting for M0519.
 
 # Licesne
 

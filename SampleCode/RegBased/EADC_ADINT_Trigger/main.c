@@ -60,7 +60,7 @@ void SYS_Init(void)
     //SystemCoreClockUpdate();
     PllClock        = PLL_CLOCK;            // PLL
     SystemCoreClock = PLL_CLOCK / 1;        // HCLK
-    CyclesPerUs     = SystemCoreClock / 1000000;  // For SYS_SysTickDelay()
+    CyclesPerUs     = SystemCoreClock / 1000000;  // For CLK_SysTickDelay()
 
     /* Enable UART module clock */
     CLK->APBCLK |= CLK_APBCLK_UART0_EN_Msk;
@@ -115,6 +115,7 @@ void EADC_FunctionTest()
 {
     uint8_t  u32SAMPLECount = 0;
     int32_t  i32ConversionData[8] = {0};
+    uint32_t u32TimeOutCnt = 0;
 
     printf("\n");
     printf("+----------------------------------------------------------------------+\n");
@@ -150,12 +151,30 @@ void EADC_FunctionTest()
     EADC->ADSSTR |= (0x1 << 7);
 
     /* Wait EADC interrupt (g_u32AdcIntFlag will be set at IRQ_Handler function) */
-    while(g_u32AdcIntFlag == 0);
+    u32TimeOutCnt = EADC_TIMEOUT;
+    while(g_u32AdcIntFlag == 0)
+    {
+        if(--u32TimeOutCnt == 0)
+        {
+            printf("Wait for EADC interrupt time-out!\n");
+            return;
+        }
+    }
+
     /* Reset the EADC interrupt indicator */
     g_u32AdcIntFlag = 0;
 
     /* Wait EADC interrupt (g_u32AdcIntFlag will be set at IRQ_Handler function) */
-    while(g_u32AdcIntFlag == 0);
+    u32TimeOutCnt = EADC_TIMEOUT;
+    while(g_u32AdcIntFlag == 0)
+    {
+        if(--u32TimeOutCnt == 0)
+        {
+            printf("Wait for EADC interrupt time-out!\n");
+            return;
+        }
+    }
+
     /* Reset the EADC interrupt indicator */
     g_u32AdcIntFlag = 0;
 
@@ -167,7 +186,15 @@ void EADC_FunctionTest()
         i32ConversionData[u32SAMPLECount] = (EADC->ADDRA[u32SAMPLECount + 4] & EADC_ADDR_RSLT_Msk);
 
     /* Wait conversion done */
-    while(EADC->ADSR0 != 0xF0);
+    u32TimeOutCnt = EADC_TIMEOUT;
+    while(EADC->ADSR0 != 0xF0)
+    {
+        if(--u32TimeOutCnt == 0)
+        {
+            printf("Wait for EADC conversion done time-out!\n");
+            return;
+        }
+    }
 
     /* Get the conversion result of the sample module */
     for(u32SAMPLECount = 4; u32SAMPLECount < 8; u32SAMPLECount++)

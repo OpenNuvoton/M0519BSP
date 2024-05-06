@@ -61,7 +61,7 @@ void SYS_Init(void)
     //SystemCoreClockUpdate();
     PllClock        = PLL_CLOCK;            // PLL
     SystemCoreClock = PLL_CLOCK / 1;        // HCLK
-    CyclesPerUs     = SystemCoreClock / 1000000;  // For SYS_SysTickDelay()
+    CyclesPerUs     = SystemCoreClock / 1000000;  // For CLK_SysTickDelay()
 
     /* Enable UART module clock */
     CLK->APBCLK |= CLK_APBCLK_UART0_EN_Msk;
@@ -116,6 +116,8 @@ void UART0_Init()
 /*---------------------------------------------------------------------------------------------------------*/
 void EADC_FunctionTest()
 {
+    uint32_t u32TimeOutCnt;
+
     printf("\n");
     printf("+----------------------------------------------------------------------+\n");
     printf("|          EADC compare function (result monitor) sample code          |\n");
@@ -168,7 +170,15 @@ void EADC_FunctionTest()
     EADC->ADSSTR |= (0x1 << 0);
 
     /* Wait EADC compare interrupt */
-    while((g_u32AdcCmp0IntFlag == 0) && (g_u32AdcCmp1IntFlag == 0));
+    u32TimeOutCnt = EADC_TIMEOUT;
+    while((g_u32AdcCmp0IntFlag == 0) && (g_u32AdcCmp1IntFlag == 0))
+    {
+        if(--u32TimeOutCnt == 0)
+        {
+            printf("Wait for EADC compare interrupt time-out!\n");
+            return;
+        }
+    }
 
     /* Disable the sample module A0 interrupt source */
     EADC->ADINTSRCTL[0] &= ~0x1;

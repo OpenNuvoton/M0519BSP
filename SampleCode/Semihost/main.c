@@ -17,8 +17,11 @@
 extern void initialise_monitor_handles(void);
 #endif
 
+
+void ProcessHardFault(void);
+void ProcessHardFault(void){ while(1); /* Halt here if hard fault occurs. */ }
 /*---------------------------------------------------------------------------------------------------------*/
-/* Main Function                                                                                            */
+/* Main Function                                                                                           */
 /*---------------------------------------------------------------------------------------------------------*/
 
 int32_t main()

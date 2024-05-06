@@ -57,7 +57,7 @@ void SYS_Init(void)
     /*---------------------------------------------------------------------------------------------------------*/
 
     /* Set GP3 multi-function pins for UART0 RXD and TXD */
-		SYS->P3_MFP &= ~(SYS_MFP_P30_Msk | SYS_MFP_P31_Msk);
+    SYS->P3_MFP &= ~(SYS_MFP_P30_Msk | SYS_MFP_P31_Msk);
     SYS->P3_MFP |= (SYS_MFP_P30_UART0_RXD | SYS_MFP_P31_UART0_TXD);
 
 
@@ -272,7 +272,7 @@ int main()
     printf("\n\nData Flash test =>\n");
     if(FlashTest(DATA_FLASH_TEST_BASE, DATA_FLASH_TEST_END, TEST_PATTERN) < 0)
     {
-        printf("\n\nUHB test failed!\n");
+        printf("\n\nData Flash test failed!\n");
         goto lexit;
     }
 

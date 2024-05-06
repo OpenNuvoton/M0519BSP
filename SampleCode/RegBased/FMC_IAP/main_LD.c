@@ -1,5 +1,5 @@
 /**************************************************************************//**
- * @file     Smpl_DrvFMC_SimpleLD.c
+ * @file     main_LD.c
  * @version  V2.00
  * $Revision: 2 $
  * $Date: 15/02/26 2:02p $
@@ -92,11 +92,11 @@ void SYS_Init(void)
     CLK->CLKSEL1 = CLK_CLKSEL1_UART_S_PLL;
 
     /* Update System Core Clock */
-    /* User can use SystemCoreClockUpdate() to calculate PllClock, SystemCoreClock and CycylesPerUs automatically. */
+    /* User can use SystemCoreClockUpdate() to calculate PllClock, SystemCoreClock and CyclesPerUs automatically. */
     //SystemCoreClockUpdate();
     PllClock        = PLL_CLOCK;            // PLL
     SystemCoreClock = PLL_CLOCK / 1;        // HCLK
-    CyclesPerUs     = PLL_CLOCK / 1000000;  // For SYS_SysTickDelay()
+    CyclesPerUs     = PLL_CLOCK / 1000000;  // For CLK_SysTickDelay()
 
     /*---------------------------------------------------------------------------------------------------------*/
     /* Init I/O Multi-function                                                                                 */
@@ -104,7 +104,7 @@ void SYS_Init(void)
 
     /* Set GP3 multi-function pins for UART0 RXD and TXD */
     SYS->P3_MFP &= ~(SYS_MFP_P30_Msk | SYS_MFP_P31_Msk);
-		SYS->P3_MFP |= (SYS_MFP_P30_UART0_RXD | SYS_MFP_P31_UART0_TXD);
+    SYS->P3_MFP |= (SYS_MFP_P30_UART0_RXD | SYS_MFP_P31_UART0_TXD);
 
     /* Lock protected registers */
     SYS_LockReg();
@@ -198,7 +198,7 @@ int32_t main(void)
     SYS_Init();
 
 #if defined(__GNUC_LD_IAP__)
-        
+
     // Delay 3 seconds
     for(i = 0; i < 30; i++)
     {

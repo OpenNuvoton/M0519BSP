@@ -90,8 +90,8 @@ void SYS_Init(void)
     /* Init I/O Multi-function                                                                                 */
     /*---------------------------------------------------------------------------------------------------------*/
     /* Set P8.4 and P8.7 multi-function configuration as ACMP0 positive input pin (ACMP0_P) and ACMP0 output pin (ACMP0_O). */
-		SYS->P8_MFP &= ~(SYS_MFP_P87_Msk | SYS_MFP_P84_Msk);
-		SYS->P8_MFP |= (SYS_MFP_P87_ACMP0_O | SYS_MFP_P84_ACMP0_P);
+    SYS->P8_MFP &= ~(SYS_MFP_P87_Msk | SYS_MFP_P84_Msk);
+    SYS->P8_MFP |= (SYS_MFP_P87_ACMP0_O | SYS_MFP_P84_ACMP0_P);
 		
     /* Disable digital input path of analog pin ACMP0_P (P8.4) to prevent leakage */
     GPIO_DISABLE_DIGITAL_PATH(P8, BIT4);

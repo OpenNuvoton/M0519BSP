@@ -52,7 +52,7 @@ extern "C"
 #define EADC_SMPB7                  (15)   /*!< SAMPLE B7 */
 
 /*---------------------------------------------------------------------------------------------------------*/
-/* ADSPCRA/ADSPCRB Constant Definitions                                                          */
+/* ADSPCRA/ADSPCRB Constant Definitions                                                                    */
 /*---------------------------------------------------------------------------------------------------------*/
 #define EADC_ADSPCR_CHSEL(x)                ((x) << EADC_ADSPCR_CHSEL_Pos)       /*!< A/D sample module channel selection */
 #define EADC_ADSPCR_TRGDLYDIV(x)            ((x) << EADC_ADSPCR_TRGDLYDIV_Pos)   /*!< A/D sample module start of conversion trigger delay clock divider selection */
@@ -98,7 +98,7 @@ extern "C"
 #define EADC_CMPSMPL_B3                         (7)    /*!< SAMPLE B3 is selected to be compare */
 
 /*---------------------------------------------------------------------------------------------------------*/
-/* ADTCR Constant Definitions                                                                          */
+/* ADTCR Constant Definitions                                                                              */
 /*---------------------------------------------------------------------------------------------------------*/
 #define EADC_ADTCR_SMPA                   (EADC_ADTCR_ADAEST_Pos)    /*!< Extend sampling time for all SAMPLE A */
 #define EADC_ADTCR_SMPB                   (EADC_ADTCR_ADBEST_Pos)    /*!< Extend sampling time for all SAMPLE B */
@@ -130,12 +130,16 @@ extern "C"
 #define EADC_TRGCOND_CENTER               (3)    /*!< PWM center trigger enable */
 
 /*---------------------------------------------------------------------------------------------------------*/
-/* Constant Definitions of EADC Channel 7 of Sample A Input Source                                          */
+/* Constant Definitions of EADC Channel 7 of Sample A Input Source                                         */
 /*---------------------------------------------------------------------------------------------------------*/
 #define EADC_CH7_EXT_INPUT_SIGNAL         (0)  /*!< External input signal       */
 #define EADC_CH7_INT_BANDGAP              (1)  /*!< Internal band-gap voltage   */
 #define EADC_CH7_INT_TEMPERATURE_SENSOR   (2)  /*!< Internal temperature sensor */
 
+/*---------------------------------------------------------------------------------------------------------*/
+/* EADC Time-out Handler Constant Definitions                                                              */
+/*---------------------------------------------------------------------------------------------------------*/
+#define EADC_TIMEOUT        SystemCoreClock     /*!< EADC time-out counter (1 second time-out) */
 
 /*@}*/ /* end of group EADC_EXPORTED_CONSTANTS */
 
@@ -529,7 +533,7 @@ extern "C"
 #define EADC_SET_SIMULTANEOUS_MODE(eadc, u32ModuleMask) ((eadc)->ADSMSELR = (u32ModuleMask))
 
 /*---------------------------------------------------------------------------------------------------------*/
-/* Define EADC functions prototype                                                                          */
+/* Define EADC functions prototype                                                                         */
 /*---------------------------------------------------------------------------------------------------------*/
 void EADC_Open(EADC_T *eadc, uint32_t u32InputMode);
 void EADC_Close(EADC_T *eadc);

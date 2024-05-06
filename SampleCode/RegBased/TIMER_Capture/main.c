@@ -124,7 +124,7 @@ void SYS_Init(void)
     CLK->CLKSEL1 = CLK_CLKSEL1_UART_S_PLL;
 
     /* Update System Core Clock */
-    /* User can use SystemCoreClockUpdate() to calculate PllClock, SystemCoreClock and CycylesPerUs automatically. */
+    /* User can use SystemCoreClockUpdate() to calculate PllClock, SystemCoreClock and CyclesPerUs automatically. */
     SystemCoreClockUpdate();
 
     /*---------------------------------------------------------------------------------------------------------*/
@@ -216,12 +216,14 @@ int main(void)
                 if((au32CAPValus[u32InitCount] - au32CAPValus[u32InitCount - 1]) != 1000000)
                 {
                     printf("*** FAIL ***\n");
-                    while(1);
+                    goto lexit;
                 }
             }
             u32InitCount = g_au32TMRINTCount[2];
         }
     }
+
+lexit:
 
     /* Stop Timer2 and Timer3 counting */
     TIMER2->TCSR = 0;

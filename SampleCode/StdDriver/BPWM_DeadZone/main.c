@@ -124,7 +124,7 @@ int main(void)
     UART0_Init();
 
     printf("+------------------------------------------------------------------------+\n");
-    printf("|                          BPWM Driver Sample Code                        |\n");
+    printf("|                          BPWM Driver Sample Code                       |\n");
     printf("|                                                                        |\n");
     printf("+------------------------------------------------------------------------+\n");
     printf("  This sample code will output all BPWM0 channels with different\n");

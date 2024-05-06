@@ -31,7 +31,7 @@ extern "C"
 */
 
 /*---------------------------------------------------------------------------------------------------------*/
-/* CMPCR constant definitions                                                                            */
+/* CMPCR constant definitions                                                                              */
 /*---------------------------------------------------------------------------------------------------------*/
 #define ACMP_CR_OUTPUT_INV           (1UL << ACMP_CR_ACMPINV_Pos)      /*!< ACMPCR setting for ACMP output inverse function. */
 #define ACMP_CR_VNEG_BANDGAP         (1UL << ACMP_CR_CN_Pos)           /*!< ACMPCR setting for selecting band-gap voltage as the source of ACMP V-. */

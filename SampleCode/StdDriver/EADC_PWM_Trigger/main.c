@@ -132,10 +132,11 @@ void BPWM0_Init()
 void EADC_FunctionTest()
 {
     int32_t  i32ConversionData[6] = {0};
+    uint32_t u32TimeOutCnt = 0;
 
     printf("\n");
     printf("+----------------------------------------------------------------------+\n");
-    printf("|                       BPWM trigger mode test                          |\n");
+    printf("|                       BPWM trigger mode test                         |\n");
     printf("+----------------------------------------------------------------------+\n");
 
     printf("\nIn this test, software will get 6 conversion result from the specified channel.\n");
@@ -167,7 +168,15 @@ void EADC_FunctionTest()
     while(1)
     {
         /* Wait EADC interrupt (g_u32AdcIntFlag will be set at IRQ_Handler function) */
-        while(g_u32AdcIntFlag == 0);
+        u32TimeOutCnt = EADC_TIMEOUT;
+        while(g_u32AdcIntFlag == 0)
+        {
+            if(--u32TimeOutCnt == 0)
+            {
+                printf("Wait for EADC interrupt time-out!\n");
+                return;
+            }
+        }
 
         /* Reset the EADC interrupt indicator */
         g_u32AdcIntFlag = 0;
@@ -192,7 +201,7 @@ void EADC_FunctionTest()
 
 
 /*---------------------------------------------------------------------------------------------------------*/
-/* ADC interrupt handler                                                                                  */
+/* ADC interrupt handler                                                                                   */
 /*---------------------------------------------------------------------------------------------------------*/
 void EADC0_IRQHandler(void)
 {

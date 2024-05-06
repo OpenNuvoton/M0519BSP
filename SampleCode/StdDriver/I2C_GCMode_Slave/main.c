@@ -53,7 +53,7 @@ void I2C0_IRQHandler(void)
 }
 
 /*---------------------------------------------------------------------------------------------------------*/
-/*  I2C0 GC mode Rx Callback Function                                                                       */
+/*  I2C0 GC mode Rx Callback Function                                                                      */
 /*---------------------------------------------------------------------------------------------------------*/
 void I2C_GCSlaveRx(uint32_t u32Status)
 {
@@ -264,11 +264,13 @@ int32_t main(void)
         if(g_au8SlvData[i] != g_au8SlvTxData[2])
         {
             printf("GC Mode Receive data fail.\n");
-            while(1);
+            goto lexit;
         }
     }
 
     printf("GC Mode receive data OK.\n");
+
+lexit:
 
     s_I2CSlvHandlerFn = NULL;
 

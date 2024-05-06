@@ -30,7 +30,7 @@ void TMR0_IRQHandler(void)
         /* Clear Timer0 time-out interrupt flag */
         TIMER_ClearIntFlag(TIMER0);
 
-        /*P8.0 gpio toggle */
+        /* P8.0 gpio toggle */
         P80 ^= 1;
     }
 }
@@ -151,13 +151,13 @@ void ECAP0_Init(void)
     /* Select Reload function */
     ECAP_SET_CNT_CLEAR_EVENT(ECAP0, ECAP_CNT_CLR_BY_CAPTURE);
 
-    /* Enable ECAP0 Input Channel 0*/
+    /* Enable ECAP0 Input Channel 0 */
     ECAP_ENABLE_INPUT_CHANNEL(ECAP0, ECAP_CTL0_CAPEN0_Msk);
 
-    /* Enalbe ECAP0 source from IC0 */
+    /* Enable ECAP0 source from IC0 */
     ECAP_SEL_INPUT_SRC(ECAP0, ECAP_IC0, ECAP_CAP_INPUT_SRC_FROM_IC);
 
-    /* Select IC0 detect risign edge */
+    /* Select IC0 detect rising edge */
     ECAP_SEL_CAPTURE_EDGE(ECAP0, ECAP_IC0, ECAP_RISING_EDGE);
 
     /* Input Channel 0 interrupt enabled */
@@ -221,7 +221,7 @@ int32_t main(void)
     /* Delay 200ms */
     CLK_SysTickDelay(200000);
 
-    /* Init & clear ECAP inuterrupt status flags */
+    /* Init & clear ECAP interrupt status flags */
     u32Status = ECAP_GET_INT_STATUS(ECAP0);
     ECAP0->STATUS = u32Status;
 

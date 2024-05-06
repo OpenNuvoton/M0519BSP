@@ -104,9 +104,11 @@ void UART0_Init()
 /*---------------------------------------------------------------------------------------------------------*/
 void EADC_FunctionTest()
 {
+    uint32_t u32TimeOutCnt;
+
     printf("\n");
     printf("+----------------------------------------------------------------------+\n");
-    printf("|          EADC compare function (result monitor) sample code         |\n");
+    printf("|          EADC compare function (result monitor) sample code          |\n");
     printf("+----------------------------------------------------------------------+\n");
     printf("\nIn this test, software will compare the conversion result of channel 2.\n");
 
@@ -149,7 +151,15 @@ void EADC_FunctionTest()
     EADC_START_CONV(EADC, 0x1);
 
     /* Wait EADC compare interrupt */
-    while((g_u32AdcCmp0IntFlag == 0) && (g_u32AdcCmp1IntFlag == 0));
+    u32TimeOutCnt = EADC_TIMEOUT;
+    while((g_u32AdcCmp0IntFlag == 0) && (g_u32AdcCmp1IntFlag == 0))
+    {
+        if(--u32TimeOutCnt == 0)
+        {
+            printf("Wait for EADC compare interrupt time-out!\n");
+            return;
+        }
+    }
 
     /* Disable the sample module A0 interrupt source */
     EADC_DISABLE_SAMPLE_MODULE_INT(EADC, 0, 0x1);

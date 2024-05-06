@@ -50,7 +50,7 @@ void I2C0_IRQHandler(void)
 }
 
 /*---------------------------------------------------------------------------------------------------------*/
-/*  I2C0 Tx Callback Function                                                                               */
+/*  I2C0 Tx Callback Function                                                                              */
 /*---------------------------------------------------------------------------------------------------------*/
 void I2C_MasterTx(uint32_t u32Status)
 {
@@ -181,7 +181,7 @@ void I2C0_Uninit(void)
 /*---------------------------------------------------------------------------------------------------------*/
 int32_t main(void)
 {
-    uint32_t i;
+    uint32_t i, u32TimeOutCnt;
 
     /* Unlock protected registers */
     SYS_UnlockReg();
@@ -237,9 +237,19 @@ int32_t main(void)
         I2C_SET_CONTROL_REG(I2C0, I2C_I2CON_STA);
 
         /* Wait I2C0 Tx Finish */
-        while(g_u8MstEndFlag == 0);
+        u32TimeOutCnt = I2C_TIMEOUT;
+        while(g_u8MstEndFlag == 0)
+        {
+            if(--u32TimeOutCnt == 0)
+            {
+                printf("Wait for I2C Tx finish time-out!\n");
+                goto lexit;
+            }
+        }
     }
     printf("Master Access Slave(0x%X) at GC Mode Test OK\n", g_u8DeviceAddr);
+
+lexit:
 
     s_I2CMstHandlerFn = NULL;
 

@@ -128,7 +128,7 @@ int main(void)
     UART0_Init();
 
     printf("+------------------------------------------------------------------------+\n");
-    printf("|                          EPWM Driver Sample Code                        |\n");
+    printf("|                          EPWM Driver Sample Code                       |\n");
     printf("|                                                                        |\n");
     printf("+------------------------------------------------------------------------+\n");
     printf("  This sample code will output all EPWM0 channels with different\n");

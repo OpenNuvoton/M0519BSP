@@ -62,7 +62,7 @@ void SYS_Init(void)
     //SystemCoreClockUpdate();
     PllClock        = PLL_CLOCK;            // PLL
     SystemCoreClock = PLL_CLOCK / 1;        // HCLK
-    CyclesPerUs     = SystemCoreClock / 1000000;  // For SYS_SysTickDelay()
+    CyclesPerUs     = SystemCoreClock / 1000000;  // For CLK_SysTickDelay()
 
     /* Enable UART module clock */
     CLK->APBCLK |= CLK_APBCLK_UART0_EN_Msk;
@@ -118,7 +118,7 @@ void UART0_Init()
 void BPWM0_Init()
 {
     /*---------------------------------------------------------------------------------------------------------*/
-    /* Init BPWM0                                                                                               */
+    /* Init BPWM0                                                                                              */
     /*---------------------------------------------------------------------------------------------------------*/
 
     /* Set BPWM0 timer clock prescaler */
@@ -147,10 +147,11 @@ void BPWM0_Init()
 void EADC_FunctionTest()
 {
     int32_t  i32ConversionData[6] = {0};
+    uint32_t u32TimeOutCnt = 0;
 
     printf("\n");
     printf("+----------------------------------------------------------------------+\n");
-    printf("|                       BPWM trigger mode test                          |\n");
+    printf("|                       BPWM trigger mode test                         |\n");
     printf("+----------------------------------------------------------------------+\n");
 
     printf("\nIn this test, software will get 6 conversion result from the specified channel.\n");
@@ -182,7 +183,15 @@ void EADC_FunctionTest()
     while(1)
     {
         /* Wait EADC interrupt (g_u32AdcIntFlag will be set at IRQ_Handler function) */
-        while(g_u32AdcIntFlag == 0);
+        u32TimeOutCnt = EADC_TIMEOUT;
+        while(g_u32AdcIntFlag == 0)
+        {
+            if(--u32TimeOutCnt == 0)
+            {
+                printf("Wait for EADC interrupt time-out!\n");
+                return;
+            }
+        }
 
         /* Reset the EADC interrupt indicator */
         g_u32AdcIntFlag = 0;

@@ -294,14 +294,14 @@ extern "C"
  *
  *    @param[in]    uart        The pointer of the specified UART module.
  *    @param[in]    u32eIntSel  Interrupt type select
- *                              - UART_IER_LIN_IEN_Msk      : Lin bus interrupt
- *                              - UART_IER_WAKE_EN_Msk      : Wakeup interrupt
- *                              - UART_IER_BUF_ERR_IEN_Msk  : Buffer Error interrupt
- *                              - UART_IER_TOUT_IEN_Msk     : Rx time-out interrupt
- *                              - UART_IER_MODEM_IEN_Msk    : Modem interrupt
- *                              - UART_IER_RLS_IEN_Msk      : Rx Line status interrupt
- *                              - UART_IER_THRE_IEN_Msk     : Tx empty interrupt
- *                              - UART_IER_RDA_IEN_Msk      : Rx ready interrupt
+ *                              - \ref UART_IER_LIN_IEN_Msk      : Lin bus interrupt
+ *                              - \ref UART_IER_WAKE_EN_Msk      : Wakeup interrupt
+ *                              - \ref UART_IER_BUF_ERR_IEN_Msk  : Buffer Error interrupt
+ *                              - \ref UART_IER_TOUT_IEN_Msk     : Rx time-out interrupt
+ *                              - \ref UART_IER_MODEM_IEN_Msk    : Modem interrupt
+ *                              - \ref UART_IER_RLS_IEN_Msk      : Rx Line status interrupt
+ *                              - \ref UART_IER_THRE_IEN_Msk     : Tx empty interrupt
+ *                              - \ref UART_IER_RDA_IEN_Msk      : Rx ready interrupt
  *
  *    @return       None
  *
@@ -315,14 +315,14 @@ extern "C"
  *
  *    @param[in]    uart        The pointer of the specified UART module.
  *    @param[in]    u32eIntSel  Interrupt type select
- *                              - UART_IER_LIN_IEN_Msk      : Lin bus interrupt
- *                              - UART_IER_WAKE_EN_Msk      : Wakeup interrupt
- *                              - UART_IER_BUF_ERR_IEN_Msk  : Buffer Error interrupt
- *                              - UART_IER_TOUT_IEN_Msk     : Rx time-out interrupt
- *                              - UART_IER_MODEM_IEN_Msk    : Modem interrupt
- *                              - UART_IER_RLS_IEN_Msk      : Rx Line status interrupt
- *                              - UART_IER_THRE_IEN_Msk     : Tx empty interrupt
- *                              - UART_IER_RDA_IEN_Msk      : Rx ready interrupt
+ *                              - \ref UART_IER_LIN_IEN_Msk      : Lin bus interrupt
+ *                              - \ref UART_IER_WAKE_EN_Msk      : Wakeup interrupt
+ *                              - \ref UART_IER_BUF_ERR_IEN_Msk  : Buffer Error interrupt
+ *                              - \ref UART_IER_TOUT_IEN_Msk     : Rx time-out interrupt
+ *                              - \ref UART_IER_MODEM_IEN_Msk    : Modem interrupt
+ *                              - \ref UART_IER_RLS_IEN_Msk      : Rx Line status interrupt
+ *                              - \ref UART_IER_THRE_IEN_Msk     : Tx empty interrupt
+ *                              - \ref UART_IER_RDA_IEN_Msk      : Rx ready interrupt
  *    @return       None
  *
  *    @details      This macro disable specified UART interrupt.
@@ -335,20 +335,20 @@ extern "C"
  *
  *    @param[in]    uart            The pointer of the specified UART module.
  *    @param[in]    u32eIntTypeFlag Interrupt Type Flag, should be
- *                                  - UART_ISR_LIN_INT_Msk          : LIN Bus Interrupt Indicator
- *                                  - UART_ISR_BUF_ERR_INT_Msk      : Buffer Error Interrupt Indicator
- *                                  - UART_ISR_TOUT_INT_Msk         : Rx Time-out Interrupt Indicator
- *                                  - UART_ISR_MODEM_INT_Msk        : MODEM Status Interrupt Indicator
- *                                  - UART_ISR_RLS_INT_Msk          : Rx Line Status Interrupt Indicator
- *                                  - UART_ISR_THRE_INT_Msk         : Tx Empty Interrupt Indicator
- *                                  - UART_ISR_RDA_INT_Msk          : Rx Ready Interrupt Indicator
- *                                  - UART_ISR_LIN_IF_Msk           : LIN Bus Interrupt Flag
- *                                  - UART_ISR_BUF_ERR_IF_Msk       : Buffer Error Interrupt Flag
- *                                  - UART_ISR_TOUT_IF_Msk          : Rx Time-out Interrupt Flag
- *                                  - UART_ISR_MODEM_IF_Msk         : MODEM Status Interrupt Flag
- *                                  - UART_ISR_RLS_IF_Msk           : Rx Line Status Interrupt Flag
- *                                  - UART_ISR_THRE_IF_Msk          : Tx Empty Interrupt Flag
- *                                  - UART_ISR_RDA_IF_Msk           : Rx Ready Interrupt Flag
+ *                                  - \ref UART_ISR_LIN_INT_Msk          : LIN Bus Interrupt Indicator
+ *                                  - \ref UART_ISR_BUF_ERR_INT_Msk      : Buffer Error Interrupt Indicator
+ *                                  - \ref UART_ISR_TOUT_INT_Msk         : Rx Time-out Interrupt Indicator
+ *                                  - \ref UART_ISR_MODEM_INT_Msk        : MODEM Status Interrupt Indicator
+ *                                  - \ref UART_ISR_RLS_INT_Msk          : Rx Line Status Interrupt Indicator
+ *                                  - \ref UART_ISR_THRE_INT_Msk         : Tx Empty Interrupt Indicator
+ *                                  - \ref UART_ISR_RDA_INT_Msk          : Rx Ready Interrupt Indicator
+ *                                  - \ref UART_ISR_LIN_IF_Msk           : LIN Bus Interrupt Flag
+ *                                  - \ref UART_ISR_BUF_ERR_IF_Msk       : Buffer Error Interrupt Flag
+ *                                  - \ref UART_ISR_TOUT_IF_Msk          : Rx Time-out Interrupt Flag
+ *                                  - \ref UART_ISR_MODEM_IF_Msk         : MODEM Status Interrupt Flag
+ *                                  - \ref UART_ISR_RLS_IF_Msk           : Rx Line Status Interrupt Flag
+ *                                  - \ref UART_ISR_THRE_IF_Msk          : Tx Empty Interrupt Flag
+ *                                  - \ref UART_ISR_RDA_IF_Msk           : Rx Ready Interrupt Flag
  *
  *    @retval       0 The specified interrupt is not happened.
  *    @retval       1 The specified interrupt is happened.

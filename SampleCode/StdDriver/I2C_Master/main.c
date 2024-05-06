@@ -56,10 +56,12 @@ void I2C0_IRQHandler(void)
 }
 
 /*---------------------------------------------------------------------------------------------------------*/
-/*  I2C0 Rx Callback Function                                                                               */
+/*  I2C0 Rx Callback Function                                                                              */
 /*---------------------------------------------------------------------------------------------------------*/
 void I2C_MasterRx(uint32_t u32Status)
 {
+    uint32_t u32TimeOutCnt;
+
     if(u32Status == 0x08)                       /* START has been transmitted and prepare SLA+W */
     {
         I2C_SET_DATA(I2C0, (g_u8DeviceAddr << 1));    /* Write SLA+W to Register I2CDAT */
@@ -133,15 +135,19 @@ void I2C_MasterRx(uint32_t u32Status)
         g_u8MstRxAbortFlag = 1;
         getchar();
         I2C_SET_CONTROL_REG(I2C0, I2C_I2CON_SI);
-        while(I2C0->I2CON & I2C_I2CON_SI_Msk);
+        u32TimeOutCnt = I2C_TIMEOUT;
+        while(I2C0->I2CON & I2C_I2CON_SI_Msk)
+            if(--u32TimeOutCnt == 0) break;
     }
 }
 
 /*---------------------------------------------------------------------------------------------------------*/
-/*  I2C0 Tx Callback Function                                                                               */
+/*  I2C0 Tx Callback Function                                                                              */
 /*---------------------------------------------------------------------------------------------------------*/
 void I2C_MasterTx(uint32_t u32Status)
 {
+    uint32_t u32TimeOutCnt;
+
     if(u32Status == 0x08)                       /* START has been transmitted */
     {
         I2C_SET_DATA(I2C0, g_u8DeviceAddr << 1);    /* Write SLA+W to Register I2CDAT */
@@ -208,7 +214,9 @@ void I2C_MasterTx(uint32_t u32Status)
         g_u8MstTxAbortFlag = 1;
         getchar();
         I2C_SET_CONTROL_REG(I2C0, I2C_I2CON_SI);
-        while(I2C0->I2CON & I2C_I2CON_SI_Msk);
+        u32TimeOutCnt = I2C_TIMEOUT;
+        while(I2C0->I2CON & I2C_I2CON_SI_Msk)
+            if(--u32TimeOutCnt == 0) break;
     }
 }
 

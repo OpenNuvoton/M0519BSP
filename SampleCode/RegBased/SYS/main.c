@@ -117,9 +117,10 @@ uint32_t g_au32PllSetting[] =
 void SYS_PLL_Test(void)
 {
     int32_t  i;
+    uint32_t u32TimeOutCnt;
 
     /*---------------------------------------------------------------------------------------------------------*/
-    /* PLL clock configuration test                                                                             */
+    /* PLL clock configuration test                                                                            */
     /*---------------------------------------------------------------------------------------------------------*/
 
     printf("\n-------------------------[ Test PLL ]-----------------------------\n");
@@ -137,7 +138,15 @@ void SYS_PLL_Test(void)
         CLK->PLLCON = g_au32PllSetting[i];
 
         /* Waiting for PLL clock ready */
-        while(!(CLK->CLKSTATUS & CLK_CLKSTATUS_PLL_STB_Msk));
+        u32TimeOutCnt = SystemCoreClock; /* 1 second time-out */
+        while(!(CLK->CLKSTATUS & CLK_CLKSTATUS_PLL_STB_Msk))
+        {
+            if(--u32TimeOutCnt == 0)
+            {
+                printf("Wait for PLL stable time-out!\n");
+                return;
+            }
+        }
 
         /* Switch HCLK clock source to PLL */
         CLK->CLKSEL0 = (CLK->CLKSEL0 & (~CLK_CLKSEL0_HCLK_S_Msk)) | CLK_CLKSEL0_HCLK_S_PLL;
@@ -190,8 +199,8 @@ void SYS_Init(void)
     CLK->CLKDIV = (CLK->CLKDIV & (~CLK_CLKDIV_HCLK_N_Msk)) | CLK_CLKDIV_HCLK(1);
 
     /* Set PLL to Power-down mode */
-    CLK->PLLCON |= CLK_PLLCON_PD_Msk;     
-    
+    CLK->PLLCON |= CLK_PLLCON_PD_Msk;
+
     /* Enable external XTAL 12MHz clock */
     CLK->PWRCON |= CLK_PWRCON_XTL12M_EN_Msk;
 
@@ -204,7 +213,7 @@ void SYS_Init(void)
     CLK->CLKSEL0 = (CLK->CLKSEL0 & (~CLK_CLKSEL0_HCLK_S_Msk)) | CLK_CLKSEL0_HCLK_S_PLL;
 
     /* Update System Core Clock */
-    /* User can use SystemCoreClockUpdate() to calculate PllClock, SystemCoreClock and CycylesPerUs automatically. */
+    /* User can use SystemCoreClockUpdate() to calculate PllClock, SystemCoreClock and CyclesPerUs automatically. */
     //SystemCoreClockUpdate();
     PllClock        = PLL_CLOCK;            // PLL
     SystemCoreClock = PLL_CLOCK / 1;        // HCLK
@@ -248,7 +257,7 @@ void UART0_Init()
 /*---------------------------------------------------------------------------------------------------------*/
 int32_t main(void)
 {
-    uint32_t u32data;
+    uint32_t u32data, u32TimeOutCnt;
 
     /* In end of main function, program issued CPU reset and write-protection will be disabled. */
     if(SYS->REGWRPROT == 1)
@@ -312,7 +321,7 @@ int32_t main(void)
         printf("Protected Address is Unlocked\n");
     }
 
-    /* Enable Brown-Out Detector and Low Voltage Reset function, and set Brown-Out Detector voltage 2.7V */
+    /* Enable Brown-out Detector and Low Voltage Reset function, and set Brown-out Detector voltage 2.7V */
     SYS->BODCR = SYS_BODCR_BOD_EN_Msk | SYS_BODCR_BOD_VL_2_7V | SYS_BODCR_LVR_EN_Msk;
 
     /* Enable BOD interrupt */
@@ -326,7 +335,9 @@ int32_t main(void)
     printf("\n\n  >>> Reset CPU <<<\n");
 
     /* Waiting for message send out */
-    while(!(UART0->FSR & UART_FSR_TE_FLAG_Msk));
+    u32TimeOutCnt = SystemCoreClock; /* 1 second time-out */
+    while(!(UART0->FSR & UART_FSR_TE_FLAG_Msk))
+        if(--u32TimeOutCnt == 0) break;
 
     /* Switch HCLK clock source to Internal RC and HCLK source divide 1 */
     CLK->CLKSEL0 = (CLK->CLKSEL0 & (~CLK_CLKSEL0_HCLK_S_Msk)) | CLK_CLKSEL0_HCLK_S_HIRC;

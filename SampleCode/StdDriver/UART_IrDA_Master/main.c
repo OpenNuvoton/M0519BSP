@@ -37,7 +37,7 @@ void IrDA_FunctionTxTest()
     printf("+-----------------------------------------------------------+\n");
     printf("|  ______                                          _______  |\n");
     printf("| |      |                                        |       | |\n");
-    printf("| |Master|--UART1_TXD(PA.0) <==> UART1_RXD(PA.1)--|Slave  | |\n");
+    printf("| |Master|--UART1_TXD(PA.0)      UART1_RXD(PA.1)--|Slave  | |\n");
     printf("| |      |                                        |       | |\n");
     printf("| |______|                                        |_______| |\n");
     printf("|                                                           |\n");

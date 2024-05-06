@@ -212,7 +212,7 @@ int main(void)
                 if((au32CAPValus[u32InitCount] - au32CAPValus[u32InitCount - 1]) != 1000000)
                 {
                     printf("*** FAIL ***\n");
-                    while(1);
+                    break;
                 }
             }
             u32InitCount = g_au32TMRINTCount[2];

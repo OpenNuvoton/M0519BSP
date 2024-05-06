@@ -67,7 +67,7 @@ int main(void)
     if((u32ID = SpiFlash_ReadMidDid(SPI0)) != 0xEF14)
     {
         printf("Wrong ID, 0x%x\n", u32ID);
-        while(1);
+        goto lexit;
     }
     else
     {
@@ -159,6 +159,8 @@ int main(void)
     {
         printf("[FAIL]\n");
     }
+   
+lexit:
 
     /* Reset SPI0 */
     SPI_Close(SPI0);

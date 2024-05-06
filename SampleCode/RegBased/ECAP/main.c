@@ -113,11 +113,11 @@ void SYS_Init(void)
     CLK->CLKSEL0 |= CLK_CLKSEL0_HCLK_S_PLL;
 
     /* Update System Core Clock */
-    /* User can use SystemCoreClockUpdate() to calculate PllClock, SystemCoreClock and CycylesPerUs automatically. */
+    /* User can use SystemCoreClockUpdate() to calculate PllClock, SystemCoreClock and CyclesPerUs automatically. */
     //SystemCoreClockUpdate();
     PllClock        = PLL_CLOCK;            // PLL
     SystemCoreClock = PLL_CLOCK / 1;        // HCLK
-    CyclesPerUs     = PLL_CLOCK / 1000000;  // For SYS_SysTickDelay()
+    CyclesPerUs     = PLL_CLOCK / 1000000;  // For CLK_SysTickDelay()
 
     /* Enable UART & ECAP0 & TMR0 module clock */
     CLK->APBCLK |= (CLK_APBCLK_UART0_EN_Msk | CLK_APBCLK_ECAP0_EN_Msk | CLK_APBCLK_TMR0_EN_Msk);
@@ -132,7 +132,7 @@ void SYS_Init(void)
 
     /* Set GP3 multi-function pins for UART0 RXD and TXD */
     SYS->P3_MFP &= ~(SYS_MFP_P30_Msk | SYS_MFP_P31_Msk);
-		SYS->P3_MFP |= (SYS_MFP_P30_UART0_RXD | SYS_MFP_P31_UART0_TXD);
+    SYS->P3_MFP |= (SYS_MFP_P30_UART0_RXD | SYS_MFP_P31_UART0_TXD);
 
     /* Set P2.3 for ECAP0_IC0*/
     SYS->P2_MFP &= ~SYS_MFP_P23_Msk;
@@ -165,10 +165,10 @@ void ECAP0_Init(void)
     /* Enable ECAP0 Input Channel 0*/
     ECAP_ENABLE_INPUT_CHANNEL(ECAP0, ECAP_CTL0_CAPEN0_Msk);
 
-    /* Enalbe ECAP0 source from IC0 */
+    /* Enable ECAP0 source from IC0 */
     ECAP_SEL_INPUT_SRC(ECAP0, ECAP_IC0, ECAP_CAP_INPUT_SRC_FROM_IC);
 
-    /* Select IC0 detect risign edge */
+    /* Select IC0 detect rising edge */
     ECAP_SEL_CAPTURE_EDGE(ECAP0, ECAP_IC0, ECAP_RISING_EDGE);
 
     /* Input Channel 0 interrupt enabled */
@@ -234,7 +234,7 @@ int32_t main(void)
     /* Delay 200ms */
     CLK_SysTickDelay(200000);
 
-    /* Init & clear ECAP inuterrupt status flags */
+    /* Init & clear ECAP interrupt status flags */
     u32Status = ECAP_GET_INT_STATUS(ECAP0);
     ECAP0->STATUS = u32Status;
 
@@ -248,7 +248,7 @@ int32_t main(void)
             /* Input Capture status is changed, and get a new hold value of input capture counter */
             u32Status = 0;
 
-            /* Caculate the IC0 input frequency */
+            /* Calculate the IC0 input frequency */
             u32Hz_DET = SystemCoreClock / (u32IC0Hold + 1);
 
             /* If IC0 input frequency is changed, print new frquency */

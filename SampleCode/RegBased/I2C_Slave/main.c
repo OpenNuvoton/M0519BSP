@@ -54,7 +54,7 @@ void I2C0_IRQHandler(void)
 }
 
 /*---------------------------------------------------------------------------------------------------------*/
-/*  I2C0 TRx Callback Function                                                                               */
+/*  I2C0 TRx Callback Function                                                                             */
 /*---------------------------------------------------------------------------------------------------------*/
 void I2C_SlaveTRx(uint32_t u32Status)
 {
@@ -136,7 +136,7 @@ void SYS_Init(void)
     /* Waiting for Internal RC clock ready */
     while(!(CLK->CLKSTATUS & CLK_CLKSTATUS_OSC22M_STB_Msk));
 
-    /* Switch HCLK clock source to Internal RC and and HCLK source divide 1 */
+    /* Switch HCLK clock source to Internal RC and HCLK source divide 1 */
     CLK->CLKSEL0 &= ~CLK_CLKSEL0_HCLK_S_Msk;
     CLK->CLKSEL0 |= CLK_CLKSEL0_HCLK_S_HIRC;
     CLK->CLKDIV &= ~CLK_CLKDIV_HCLK_N_Msk;
@@ -155,11 +155,11 @@ void SYS_Init(void)
     CLK->CLKSEL0 |= CLK_CLKSEL0_HCLK_S_PLL;
 
     /* Update System Core Clock */
-    /* User can use SystemCoreClockUpdate() to calculate PllClock, SystemCoreClock and CycylesPerUs automatically. */
+    /* User can use SystemCoreClockUpdate() to calculate PllClock, SystemCoreClock and CyclesPerUs automatically. */
     //SystemCoreClockUpdate();
     PllClock        = PLL_CLOCK;            // PLL
     SystemCoreClock = PLL_CLOCK / 1;        // HCLK
-    CyclesPerUs     = PLL_CLOCK / 1000000;  // For SYS_SysTickDelay()
+    CyclesPerUs     = PLL_CLOCK / 1000000;  // For CLK_SysTickDelay()
 
     /* Enable UART0 & I2C0 module clock */
     CLK->APBCLK |= (CLK_APBCLK_UART0_EN_Msk | CLK_APBCLK_I2C0_EN_Msk);
@@ -256,7 +256,7 @@ void I2C0_Uninit(void)
 /*---------------------------------------------------------------------------------------------------------*/
 int32_t main(void)
 {
-    uint32_t i;
+    uint32_t i, u32TimeOutCnt;
 
     /* Unlock protected registers */
     SYS_UnlockReg();
@@ -323,7 +323,10 @@ int32_t main(void)
         {
             g_u8SlvTRxAbortFlag = 0;
 
-            while(I2C0->I2CON & I2C_I2CON_SI_Msk);
+            u32TimeOutCnt = I2C_TIMEOUT;
+            while(I2C0->I2CON & I2C_I2CON_SI_Msk)
+                if(--u32TimeOutCnt == 0) break;
+
             printf("I2C Slave re-start. status[0x%x]\n", I2C0->I2CSTATUS);
             I2C_SET_CONTROL_REG(I2C0, I2C_I2CON_SI_AA);
         }

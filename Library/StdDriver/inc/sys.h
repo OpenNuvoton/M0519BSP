@@ -659,11 +659,14 @@ static __INLINE void SYS_LockReg(void)
   */
 static __INLINE void SYS_UnlockReg(void)
 {
+    uint32_t u32TimeOutCnt = __HIRC;
+
     while(SYS->REGWRPROT != SYS_REGWRPROT_REGPROTDIS_Msk)
     {
         SYS->REGWRPROT = 0x59;
         SYS->REGWRPROT = 0x16;
         SYS->REGWRPROT = 0x88;
+        if(--u32TimeOutCnt == 0) break;
     }
 }
 

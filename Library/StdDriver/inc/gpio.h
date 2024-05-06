@@ -304,12 +304,26 @@ extern "C"
 /**
  * @brief       Set De-bounce Sampling Cycle Time
  *
- * @param[in]   u32ClkSrc   The de-bounce counter clock source. It could be GPIO_DBCLKSRC_HCLK or GPIO_DBCLKSRC_LIRC.
+ * @param[in]   u32ClkSrc   The de-bounce counter clock source. It could be
+ *                          - \ref GPIO_DBCTL_DBCLKSRC_HCLK
+ *                          - \ref GPIO_DBCTL_DBCLKSRC_LIRC
  * @param[in]   u32ClkSel   The de-bounce sampling cycle selection. It could be \n
- *                              GPIO_DBCLKSEL_1, GPIO_DBCLKSEL_2, GPIO_DBCLKSEL_4, GPIO_DBCLKSEL_8, \n
- *                              GPIO_DBCLKSEL_16, GPIO_DBCLKSEL_32, GPIO_DBCLKSEL_64, GPIO_DBCLKSEL_128, \n
- *                              GPIO_DBCLKSEL_256, GPIO_DBCLKSEL_512, GPIO_DBCLKSEL_1024, GPIO_DBCLKSEL_2048, \n
- *                              GPIO_DBCLKSEL_4096, GPIO_DBCLKSEL_8192, GPIO_DBCLKSEL_16384, GPIO_DBCLKSEL_32768.
+ *                          - \ref GPIO_DBCLKSEL_1
+ *                          - \ref GPIO_DBCLKSEL_2
+ *                          - \ref GPIO_DBCLKSEL_4
+ *                          - \ref GPIO_DBCLKSEL_8
+ *                          - \ref GPIO_DBCLKSEL_16
+ *                          - \ref GPIO_DBCLKSEL_32
+ *                          - \ref GPIO_DBCLKSEL_64
+ *                          - \ref GPIO_DBCLKSEL_128
+ *                          - \ref GPIO_DBCLKSEL_256
+ *                          - \ref GPIO_DBCLKSEL_512
+ *                          - \ref GPIO_DBCLKSEL_1024
+ *                          - \ref GPIO_DBCLKSEL_2048
+ *                          - \ref GPIO_DBCLKSEL_4096
+ *                          - \ref GPIO_DBCLKSEL_8192
+ *                          - \ref GPIO_DBCLKSEL_16384
+ *                          - \ref GPIO_DBCLKSEL_32768
  *
  * @return      None
  *
@@ -363,7 +377,11 @@ extern "C"
  *                              It could be 0 ~ 7 for P0/P1/P2/P3/P4/P5/P6/P7/P8/P9 GPIO port. \n
  *                              It could be 0 ~ 1 for PA GPIO port.
  * @param[in]   u32IntAttribs   The interrupt attribute of specified GPIO pin. It could be \n
- *                              GPIO_INT_RISING, GPIO_INT_FALLING, GPIO_INT_BOTH_EDGE, GPIO_INT_HIGH, GPIO_INT_LOW.
+ *                              - \ref GPIO_INT_RISING
+ *                              - \ref GPIO_INT_FALLING
+ *                              - \ref GPIO_INT_BOTH_EDGE
+ *                              - \ref GPIO_INT_HIGH
+ *                              - \ref GPIO_INT_LOW
  *
  * @return      None
  *
@@ -375,7 +393,7 @@ extern "C"
 /**
  * @brief       Disable External GPIO Interrupt 0
  *
- * @param[in]   port        GPIO port. GPIO port. It could be P0, P1, P2, P3, P4, P5, P6 ,P7, P8, P9 or PA.
+ * @param[in]   port        GPIO port. It could be P0, P1, P2, P3, P4, P5, P6 ,P7, P8, P9 or PA.
  * @param[in]   u32Pin      The pin of specified GPIO port. \n
  *                          It could be 0 ~ 7 for P0/P1/P2/P3/P4/P5/P6/P7/P8/P9 GPIO port. \n
  *                          It could be 0 ~ 1 for PA GPIO port.
@@ -395,7 +413,11 @@ extern "C"
  *                              It could be 0 ~ 7 for P0/P1/P2/P3/P4/P5/P6/P7/P8/P9 GPIO port. \n
  *                              It could be 0 ~ 1 for PA GPIO port.
  * @param[in]   u32IntAttribs   The interrupt attribute of specified GPIO pin. It could be \n
- *                              GPIO_INT_RISING, GPIO_INT_FALLING, GPIO_INT_BOTH_EDGE, GPIO_INT_HIGH, GPIO_INT_LOW.
+ *                              - \ref GPIO_INT_RISING
+ *                              - \ref GPIO_INT_FALLING
+ *                              - \ref GPIO_INT_BOTH_EDGE
+ *                              - \ref GPIO_INT_HIGH
+ *                              - \ref GPIO_INT_LOW
  *
  * @return      None
  *

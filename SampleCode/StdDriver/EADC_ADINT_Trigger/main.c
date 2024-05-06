@@ -98,12 +98,13 @@ void UART0_Init()
 }
 
 /*---------------------------------------------------------------------------------------------------------*/
-/* EADC function test                                                                                       */
+/* EADC function test                                                                                      */
 /*---------------------------------------------------------------------------------------------------------*/
 void EADC_FunctionTest()
 {
     uint8_t  u32SAMPLECount = 0;
     int32_t  i32ConversionData[8] = {0};
+    uint32_t u32TimeOutCnt = 0;
 
     printf("\n");
     printf("+----------------------------------------------------------------------+\n");
@@ -138,12 +139,30 @@ void EADC_FunctionTest()
     EADC_START_CONV(EADC, (0x1 << 7));
 
     /* Wait EADC interrupt (g_u32AdcIntFlag will be set at IRQ_Handler function) */
-    while(g_u32AdcIntFlag == 0);
+    u32TimeOutCnt = EADC_TIMEOUT;
+    while(g_u32AdcIntFlag == 0)
+    {
+        if(--u32TimeOutCnt == 0)
+        {
+            printf("Wait for EADC interrupt time-out!\n");
+            return;
+        }
+    }
+
     /* Reset the EADC interrupt indicator */
     g_u32AdcIntFlag = 0;
 
     /* Wait EADC interrupt (g_u32AdcIntFlag will be set at IRQ_Handler function) */
-    while(g_u32AdcIntFlag == 0);
+    u32TimeOutCnt = EADC_TIMEOUT;
+    while(g_u32AdcIntFlag == 0)
+    {
+        if(--u32TimeOutCnt == 0)
+        {
+            printf("Wait for EADC interrupt time-out!\n");
+            return;
+        }
+    }
+
     /* Reset the EADC interrupt indicator */
     g_u32AdcIntFlag = 0;
 
@@ -155,7 +174,15 @@ void EADC_FunctionTest()
         i32ConversionData[u32SAMPLECount] = EADC_GET_CONV_DATA(EADC, (u32SAMPLECount + 4));
 
     /* Wait conversion done */
-    while(EADC_GET_DATA_VALID_FLAG(EADC, 0xF0) != 0xF0);
+    u32TimeOutCnt = EADC_TIMEOUT;
+    while(EADC_GET_DATA_VALID_FLAG(EADC, 0xF0) != 0xF0)
+    {
+        if(--u32TimeOutCnt == 0)
+        {
+            printf("Wait for EADC conversion done time-out!\n");
+            return;
+        }
+    }
 
     /* Get the conversion result of the sample module */
     for(u32SAMPLECount = 4; u32SAMPLECount < 8; u32SAMPLECount++)

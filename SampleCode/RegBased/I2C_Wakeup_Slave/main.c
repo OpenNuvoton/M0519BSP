@@ -77,7 +77,7 @@ void PWRWU_IRQHandler(void)
 }
 
 /*---------------------------------------------------------------------------------------------------------*/
-/*  I2C0 Slave Transmit/Receive Callback Function                                                                               */
+/*  I2C0 Slave Transmit/Receive Callback Function                                                          */
 /*---------------------------------------------------------------------------------------------------------*/
 void I2C_SlaveTRx(uint32_t u32Status)
 {
@@ -146,7 +146,7 @@ void SYS_Init(void)
     /* Waiting for Internal RC clock ready */
     while(!(CLK->CLKSTATUS & CLK_CLKSTATUS_OSC22M_STB_Msk));
 
-    /* Switch HCLK clock source to Internal RC and and HCLK source divide 1 */
+    /* Switch HCLK clock source to Internal RC and HCLK source divide 1 */
     CLK->CLKSEL0 &= ~CLK_CLKSEL0_HCLK_S_Msk;
     CLK->CLKSEL0 |= CLK_CLKSEL0_HCLK_S_HIRC;
     CLK->CLKDIV &= ~CLK_CLKDIV_HCLK_N_Msk;
@@ -165,11 +165,11 @@ void SYS_Init(void)
     CLK->CLKSEL0 |= CLK_CLKSEL0_HCLK_S_PLL;
 
     /* Update System Core Clock */
-    /* User can use SystemCoreClockUpdate() to calculate PllClock, SystemCoreClock and CycylesPerUs automatically. */
+    /* User can use SystemCoreClockUpdate() to calculate PllClock, SystemCoreClock and CyclesPerUs automatically. */
     //SystemCoreClockUpdate();
     PllClock        = PLL_CLOCK;            // PLL
     SystemCoreClock = PLL_CLOCK / 1;        // HCLK
-    CyclesPerUs     = PLL_CLOCK / 1000000;  // For SYS_SysTickDelay()
+    CyclesPerUs     = PLL_CLOCK / 1000000;  // For CLK_SysTickDelay()
 
     /* Enable UART0 & I2C0 module clock */
     CLK->APBCLK |= (CLK_APBCLK_UART0_EN_Msk | CLK_APBCLK_I2C0_EN_Msk);
@@ -250,7 +250,7 @@ void I2C0_Init(void)
 
 void I2C0_Uninit(void)
 {
-    /* Disable I20C interrupt and clear corresponding NVIC bit */
+    /* Disable I2C0 interrupt and clear corresponding NVIC bit */
     I2C0->I2CON &= ~I2C_I2CON_EI_Msk;
     NVIC_DisableIRQ(I2C0_IRQn);
 
@@ -264,7 +264,7 @@ void I2C0_Uninit(void)
 /*---------------------------------------------------------------------------------------------------------*/
 int32_t main(void)
 {
-    uint32_t i;
+    uint32_t i, u32TimeOutCnt;
 
     /* Unlock protected registers */
     SYS_UnlockReg();
@@ -326,9 +326,11 @@ int32_t main(void)
 
     printf("\n");
     printf("CHIP enter power down status.\n");
-    
+
     /* Waiting for UART printf finish*/
-    while(((UART0->FSR) & UART_FSR_TE_FLAG_Msk) == 0);
+    u32TimeOutCnt = SystemCoreClock; /* 1 second time-out */
+    while(((UART0->FSR) & UART_FSR_TE_FLAG_Msk) == 0)
+        if(--u32TimeOutCnt == 0) break;
 
     if(((I2C0->I2CON)&I2C_I2CON_SI_Msk) != 0)
     {
@@ -342,7 +344,17 @@ int32_t main(void)
     __NOP();
     __NOP();
 
-    while((g_u8SlvPWRDNWK & g_u8SlvI2CWK) == 0);
+    u32TimeOutCnt = I2C_TIMEOUT;
+    while((g_u8SlvPWRDNWK & g_u8SlvI2CWK) == 0)
+    {
+        if(--u32TimeOutCnt == 0)
+        {
+            printf("Wait for system or I2C interrupt time-out!\n");
+            break;
+        }
+    }
+
+    /* Wake-up Interrupt Message */
     printf("Power-down Wake-up INT 0x%x\n", ((CLK->PWRCON) & CLK_PWRCON_PD_WU_STS_Msk));
     printf("I2C WAKE INT 0x%x\n", I2C0->I2CWKUPSTS);
 

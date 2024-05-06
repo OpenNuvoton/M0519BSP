@@ -12,7 +12,7 @@
 #include "targetdev.h"
 #include "uart_transfer.h"
 
-__align(4) uint8_t  uart_rcvbuf[MAX_PKT_SIZE] = {0};
+__attribute__((aligned(4))) uint8_t  uart_rcvbuf[MAX_PKT_SIZE] = {0};
 
 uint8_t volatile bUartDataReady = 0;
 uint8_t volatile bufhead = 0;
@@ -21,22 +21,22 @@ uint8_t volatile bufhead = 0;
 /* please check "targetdev.h" for chip specifc define option */
 
 /*---------------------------------------------------------------------------------------------------------*/
-/* ISR to handle UART Channel 0 interrupt event                                                            */
+/* ISR to handle UART interrupt event                                                                      */
 /*---------------------------------------------------------------------------------------------------------*/
 void UART_T_IRQHandler(void)
 {
     /* Determine interrupt source */
     uint32_t u32IntSrc = UART_T->ISR;
 
-    /* RDA FIFO interrupt and RDA timeout interrupt */    
-    if (u32IntSrc & (UART_ISR_RDA_IF_Msk|UART_ISR_TOUT_IF_Msk)) { 
+    /* RDA FIFO interrupt and RDA timeout interrupt */
+    if (u32IntSrc & (UART_ISR_RDA_IF_Msk|UART_ISR_TOUT_IF_Msk)) {
         /* Read data until RX FIFO is empty or data is over maximum packet size */
-        while (((UART_T->FSR & UART_FSR_RX_EMPTY_Msk) == 0) && (bufhead < MAX_PKT_SIZE)) {	
+        while (((UART_T->FSR & UART_FSR_RX_EMPTY_Msk) == 0) && (bufhead < MAX_PKT_SIZE)) {
             uart_rcvbuf[bufhead++] = UART_T->RBR;
         }
     }
 
-    /* Reset data buffer index */        
+    /* Reset data buffer index */
     if (bufhead == MAX_PKT_SIZE) {
         bUartDataReady = TRUE;
         bufhead = 0;
@@ -45,18 +45,18 @@ void UART_T_IRQHandler(void)
     }
 }
 
-extern __align(4) uint8_t response_buff[64];
+extern __attribute__((aligned(4))) uint8_t response_buff[64];
 void PutString(void)
 {
     uint32_t i;
 
-    /* UART send response to master */      
+    /* UART send response to master */
     for (i = 0; i < MAX_PKT_SIZE; i++) {
-        
-        /* Wait for TX not full */        
+
+        /* Wait for TX not full */
         while ((UART_T->FSR & UART_FSR_TX_FULL_Msk));
 
-        /* UART send data */         
+        /* UART send data */
         UART_T->THR = response_buff[i];
     }
 }

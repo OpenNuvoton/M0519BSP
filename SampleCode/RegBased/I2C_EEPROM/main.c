@@ -29,7 +29,7 @@ typedef void (*I2C_FUNC)(uint32_t u32Status);
 static volatile I2C_FUNC s_I2CHandlerFn = NULL;
 
 /*---------------------------------------------------------------------------------------------------------*/
-/*  I2C0 IRQ Handler                                                                                        */
+/*  I2C0 IRQ Handler                                                                                       */
 /*---------------------------------------------------------------------------------------------------------*/
 void I2C0_IRQHandler(void)
 {
@@ -50,7 +50,7 @@ void I2C0_IRQHandler(void)
 }
 
 /*---------------------------------------------------------------------------------------------------------*/
-/*  I2C0 Rx Callback Function                                                                               */
+/*  I2C0 Rx Callback Function                                                                              */
 /*---------------------------------------------------------------------------------------------------------*/
 void I2C_MasterRx(uint32_t u32Status)
 {
@@ -103,7 +103,7 @@ void I2C_MasterRx(uint32_t u32Status)
 }
 
 /*---------------------------------------------------------------------------------------------------------*/
-/*  I2C0 Tx Callback Function                                                                               */
+/*  I2C0 Tx Callback Function                                                                              */
 /*---------------------------------------------------------------------------------------------------------*/
 void I2C_MasterTx(uint32_t u32Status)
 {
@@ -172,11 +172,11 @@ void SYS_Init(void)
     CLK->CLKSEL0 |= CLK_CLKSEL0_HCLK_S_PLL;
 
     /* Update System Core Clock */
-    /* User can use SystemCoreClockUpdate() to calculate PllClock, SystemCoreClock and CycylesPerUs automatically. */
+    /* User can use SystemCoreClockUpdate() to calculate PllClock, SystemCoreClock and CyclesPerUs automatically. */
     //SystemCoreClockUpdate();
     PllClock        = PLL_CLOCK;            // PLL
     SystemCoreClock = PLL_CLOCK / 1;        // HCLK
-    CyclesPerUs     = PLL_CLOCK / 1000000;  // For SYS_SysTickDelay()
+    CyclesPerUs     = PLL_CLOCK / 1000000;  // For CLK_SysTickDelay()
 
     /* Enable UART0 & I2C0 module clock */
     CLK->APBCLK |= (CLK_APBCLK_UART0_EN_Msk | CLK_APBCLK_I2C0_EN_Msk);
@@ -248,7 +248,7 @@ void I2C0_Init(void)
 /*---------------------------------------------------------------------------------------------------------*/
 int32_t main(void)
 {
-    uint32_t i;
+    uint32_t i, u32TimeOutCnt;
 
     /* Unlock protected registers */
     SYS_UnlockReg();
@@ -273,7 +273,7 @@ int32_t main(void)
 
     printf("The I/O connection for I2C0:\n");
     printf("I2C0_SDA(P3.4), I2C0_SCL(P3.5)\n");
-    
+
     /* Init I2C0 to access EEPROM */
     I2C0_Init();
 
@@ -295,7 +295,15 @@ int32_t main(void)
         I2C_SET_CONTROL_REG(I2C0, I2C_I2CON_STA);
 
         /* Wait I2C0 Tx Finish */
-        while(g_u8EndFlag == 0);
+        u32TimeOutCnt = I2C_TIMEOUT;
+        while(g_u8EndFlag == 0)
+        {
+            if(--u32TimeOutCnt == 0)
+            {
+                printf("Wait for I2C Tx finish time-out!\n");
+                goto lexit;
+            }
+        }
         g_u8EndFlag = 0;
 
         /* I2C0 function to read data from slave */
@@ -308,16 +316,26 @@ int32_t main(void)
         I2C_SET_CONTROL_REG(I2C0, I2C_I2CON_STA);
 
         /* Wait I2C0 Rx Finish */
-        while(g_u8EndFlag == 0);
+        u32TimeOutCnt = I2C_TIMEOUT;
+        while(g_u8EndFlag == 0)
+        {
+            if(--u32TimeOutCnt == 0)
+            {
+                printf("Wait for I2C Rx finish time-out!\n");
+                goto lexit;
+            }
+        }
 
         /* Compare data */
         if(g_u8RxData != g_au8TxData[2])
         {
             printf("I2C Byte Write/Read Failed, Data 0x%x\n", g_u8RxData);
-            return -1;
+            goto lexit;
         }
     }
     printf("I2C0 Access EEPROM Test OK\n");
+
+lexit:
 
     /* Close I2C0 */
     s_I2CHandlerFn = NULL;

@@ -107,23 +107,27 @@ void SYS_Init(void)
     /*---------------------------------------------------------------------------------------------------------*/
     /* Set P8.4 and P8.7 multi-function configuration as ACMP0 positive input pin (ACMP0_P) and ACMP0 output pin (ACMP0_O). */
     SYS->P8_MFP &= ~(SYS_MFP_P87_Msk | SYS_MFP_P84_Msk);
-		SYS->P8_MFP |= (SYS_MFP_P87_ACMP0_O | SYS_MFP_P84_ACMP0_P);
+    SYS->P8_MFP |= (SYS_MFP_P87_ACMP0_O | SYS_MFP_P84_ACMP0_P);
 
 
     /* Disable digital input path of analog pin ACMP0_P (P8.4) to prevent leakage */
     GPIO_DISABLE_DIGITAL_PATH(P8, BIT4);
 
     /* Set P3 multi-function pins for UART0 RXD and TXD */
-		SYS->P3_MFP &= ~(SYS_MFP_P30_Msk | SYS_MFP_P31_Msk);
-		SYS->P3_MFP |= (SYS_MFP_P30_UART0_RXD | SYS_MFP_P31_UART0_TXD);
+    SYS->P3_MFP &= ~(SYS_MFP_P30_Msk | SYS_MFP_P31_Msk);
+    SYS->P3_MFP |= (SYS_MFP_P30_UART0_RXD | SYS_MFP_P31_UART0_TXD);
 }
 
 void PowerDownFunction(void)
 {
+    uint32_t u32TimeOutCnt;
+
     printf("\nSystem enter power-down mode ... ");
 
     /* To check if all the debug messages are finished */
-    while(IsDebugFifoEmpty() == 0);
+    u32TimeOutCnt = SystemCoreClock; /* 1 second time-out */
+    while(IsDebugFifoEmpty() == 0)
+        if(--u32TimeOutCnt == 0) break;
 
     /* Deep sleep mode is selected */
     SCB->SCR = SCB_SCR_SLEEPDEEP_Msk;

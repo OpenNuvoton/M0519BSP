@@ -119,6 +119,7 @@ void TIMER0_Init()
 void EADC_FunctionTest()
 {
     int32_t  i32ConversionData[6] = {0};
+    uint32_t u32TimeOutCnt;
 
     printf("\n");
     printf("+----------------------------------------------------------------------+\n");
@@ -151,7 +152,15 @@ void EADC_FunctionTest()
     while(1)
     {
         /* Wait EADC interrupt (g_u32AdcIntFlag will be set at IRQ_Handler function) */
-        while(g_u32AdcIntFlag == 0);
+        u32TimeOutCnt = EADC_TIMEOUT;
+        while(g_u32AdcIntFlag == 0)
+        {
+            if(--u32TimeOutCnt == 0)
+            {
+                printf("Wait for EADC interrupt time-out!\n");
+                return;
+            }
+        }
 
         /* Reset the EADC interrupt indicator */
         g_u32AdcIntFlag = 0;

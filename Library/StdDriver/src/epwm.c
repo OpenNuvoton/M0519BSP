@@ -6,8 +6,8 @@
  * @brief    EPWM driver source file
  *
  * @note
- * SPDX-License-Identifier: Apache-2.0
- * Copyright (C) 2014 Nuvoton Technology Corp. All rights reserved.
+ * @copyright SPDX-License-Identifier: Apache-2.0
+ * @copyright Copyright (C) 2014 Nuvoton Technology Corp. All rights reserved.
 *****************************************************************************/
 #include "M0519.h"
 
@@ -71,9 +71,9 @@ uint32_t EPWM_ConfigOutputChannel(EPWM_T *epwm,
     u16CNR -= 1;
     /* convert to real register value */
     u8Divider = u32PWMDividerToRegTbl[u8Divider];
-    (epwm)->PWMCON = (epwm)->PWMCON & ~EPWM_PWMCON_PWMDIV_Msk | (u8Divider << EPWM_PWMCON_PWMDIV_Pos);
+    (epwm)->PWMCON = ((epwm)->PWMCON & ~(EPWM_PWMCON_PWMDIV_Msk | (u8Divider << EPWM_PWMCON_PWMDIV_Pos)));
     /* set EPWM to edge aligned type */
-    (epwm)->PWMCON = (epwm)->PWMCON & ~EPWM_PWMCON_PWMTYPE_Msk | EPWM_EDGE_ALIGNED;
+    (epwm)->PWMCON = ((epwm)->PWMCON & ~(EPWM_PWMCON_PWMTYPE_Msk | EPWM_EDGE_ALIGNED));
     if(u32DutyCycle)
     {
         *((__IO uint32_t *)((((uint32_t) & ((epwm)->PWM0)) + ((u32ChannelNum) >> 1) * 4))) = u32DutyCycle * (u16CNR + 1) / 100 - 1;

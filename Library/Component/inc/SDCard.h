@@ -6,8 +6,8 @@
  * @brief    SD Card driver header file
  *
  * @note
- * SPDX-License-Identifier: Apache-2.0
- * Copyright (C) 2014 Nuvoton Technology Corp. All rights reserved.
+ * @copyright SPDX-License-Identifier: Apache-2.0
+ * @copyright Copyright (C) 2014 Nuvoton Technology Corp. All rights reserved.
 *****************************************************************************/
 #ifndef __SDCARD_H__
 #define __SDCARD_H__

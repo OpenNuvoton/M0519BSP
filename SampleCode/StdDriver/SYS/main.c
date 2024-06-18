@@ -7,8 +7,9 @@
  *           Change system clock to different PLL frequency and output system clock from CLKO pin.
  *
  * @note
- * Copyright (C) 2011 Nuvoton Technology Corp. All rights reserved.
  *
+ * @copyright SPDX-License-Identifier: Apache-2.0
+ * @copyright Copyright (C) 2014 Nuvoton Technology Corp. All rights reserved.
  ******************************************************************************/
 #include <stdio.h>
 #include "M0519.h"
@@ -204,7 +205,7 @@ void SYS_Init(void)
     SYS->P3_MFP |= (SYS_MFP_P30_UART0_RXD | SYS_MFP_P31_UART0_TXD);
 
     /* Set P5 multi-function pins for CLKO */
-    SYS->P5_MFP = SYS->P5_MFP & (~SYS_MFP_P55_Msk) | SYS_MFP_P55_CLKO;
+    SYS->P5_MFP = (SYS->P5_MFP & ~SYS_MFP_P55_Msk) | SYS_MFP_P55_CLKO;
 
 }
 

@@ -5,8 +5,9 @@
  * $Date: 15/03/24 10:26a $
  * @brief    Demonstrate how to trigger EADC by BPWM.
  * @note
- * Copyright (C) 2014 Nuvoton Technology Corp. All rights reserved.
+ * @copyright SPDX-License-Identifier: Apache-2.0
  *
+ * @copyright Copyright (C) 2014 Nuvoton Technology Corp. All rights reserved.
  ******************************************************************************/
 #include <stdio.h>
 #include "M0519.h"

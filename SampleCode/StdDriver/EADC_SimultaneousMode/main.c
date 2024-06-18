@@ -5,8 +5,9 @@
  * $Date: 15/07/16 1:22p $
  * @brief    Show how to converts two different input signal at the same time by simultaneous mode of EADC.(Two ADC converters sample simultaneously.)
  * @note
- * Copyright (C) 2014 Nuvoton Technology Corp. All rights reserved.
+ * @copyright SPDX-License-Identifier: Apache-2.0
  *
+ * @copyright Copyright (C) 2014 Nuvoton Technology Corp. All rights reserved.
  ******************************************************************************/
 #include <stdio.h>
 #include "M0519.h"

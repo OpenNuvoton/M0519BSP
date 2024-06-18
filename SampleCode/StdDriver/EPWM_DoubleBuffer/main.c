@@ -5,8 +5,9 @@
  * $Date: 15/03/19 1:12p $
  * @brief    Change duty cycle and period of output waveform by EPWM Double Buffer function.
  * @note
- * Copyright (C) 2014 Nuvoton Technology Corp. All rights reserved.
  *
+ * @copyright SPDX-License-Identifier: Apache-2.0
+ * @copyright Copyright (C) 2014 Nuvoton Technology Corp. All rights reserved.
  ******************************************************************************/
 #include <stdio.h>
 #include "M0519.h"
@@ -95,7 +96,7 @@ void SYS_Init(void)
     SYS->P3_MFP |= (SYS_MFP_P30_UART0_RXD | SYS_MFP_P31_UART0_TXD);
 
     /* Set P5 multi-function pins for CLKO */
-    SYS->P5_MFP = SYS->P5_MFP & (~SYS_MFP_P55_Msk) | SYS_MFP_P55_CLKO;
+    SYS->P5_MFP = (SYS->P5_MFP & ~SYS_MFP_P55_Msk) | SYS_MFP_P55_CLKO;
 
     /* Set P0 multi-function pins for EPWM Channel 0(PWM0_CH0) ~ channel 5(PWM0_CH5) */
     SYS->P0_MFP &= ~(SYS_MFP_P00_Msk | SYS_MFP_P01_Msk | SYS_MFP_P02_Msk | SYS_MFP_P03_Msk | SYS_MFP_P04_Msk | SYS_MFP_P05_Msk);

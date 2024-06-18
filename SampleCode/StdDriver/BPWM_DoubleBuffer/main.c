@@ -5,8 +5,9 @@
  * $Date: 15/03/24 10:21a $
  * @brief    Change duty cycle and period of output waveform by BPWM Double Buffer function.
  * @note
- * Copyright (C) 2014 Nuvoton Technology Corp. All rights reserved.
  *
+ * @copyright SPDX-License-Identifier: Apache-2.0
+ * @copyright Copyright (C) 2014 Nuvoton Technology Corp. All rights reserved.
  ******************************************************************************/
 #include <stdio.h>
 #include "M0519.h"
@@ -92,11 +93,11 @@ void SYS_Init(void)
     SYS->P3_MFP |= (SYS_MFP_P30_UART0_RXD | SYS_MFP_P31_UART0_TXD);
 
     /* Set P5 multi-function pins for CLKO */
-    SYS->P5_MFP = SYS->P5_MFP & (~SYS_MFP_P55_Msk) | SYS_MFP_P55_CLKO;
+    SYS->P5_MFP = (SYS->P5_MFP & ~SYS_MFP_P55_Msk) | SYS_MFP_P55_CLKO;
 
     /* Set P5 multi-function pins for BPWM0 Channel 0 */
-    SYS->P5_MFP = SYS->P5_MFP & (~SYS_MFP_P56_Msk) | SYS_MFP_P56_BPWM0_CH0; /* Enable P5.6 PWM function pin(BPWM0_CH0) */
-    SYS->P5_MFP = SYS->P5_MFP & (~SYS_MFP_P57_Msk) | SYS_MFP_P57_BPWM0_CH1; /* Enable P5.7 PWM function pin(BPWM0_CH1) */
+    SYS->P5_MFP = (SYS->P5_MFP & ~SYS_MFP_P56_Msk) | SYS_MFP_P56_BPWM0_CH0; /* Enable P5.6 PWM function pin(BPWM0_CH0) */
+    SYS->P5_MFP = (SYS->P5_MFP & ~SYS_MFP_P57_Msk) | SYS_MFP_P57_BPWM0_CH1; /* Enable P5.7 PWM function pin(BPWM0_CH1) */
 }
 
 void UART0_Init()

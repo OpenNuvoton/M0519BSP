@@ -76,7 +76,7 @@ typedef enum IRQn
     SPI0_IRQn                 = 14,       /*!< SPI0 Interrupt                                         */
     SPI1_IRQn                 = 15,       /*!< SPI1 Interrupt                                         */
     SPI2_IRQn                 = 16,       /*!< SPI2 Interrupt                                         */
-    REV_IRQn                  = 17,       
+    REV_IRQn                  = 17,
     I2C0_IRQn                 = 18,       /*!< I2C0 Interrupt                                         */
     CKD_IRQn                  = 19,       /*!< CKD Interrupt                                          */
     EPWM0_IRQn                = 21,       /*!< Enhanced PWM0 Interrupt                                */
@@ -103,7 +103,10 @@ typedef enum IRQn
 #define __MPU_PRESENT           0       /*!< armikcmu does not provide a MPU present or not       */
 #define __NVIC_PRIO_BITS        2       /*!< armikcmu Supports 2 Bits for the Priority Levels     */
 #define __Vendor_SysTickConfig  0       /*!< Set to 1 if different SysTick Config is used         */
-
+#define __FPU_PRESENT           0
+#ifndef __SOFTFP__
+    #define __SOFTFP__             1
+#endif
 
 /*@}*/ /* end of group CMSIS */
 
@@ -112,7 +115,7 @@ typedef enum IRQn
 #include "system_M0519.h"        /* M0519 System                                          */
 
 #if defined ( __CC_ARM   )
-#pragma anon_unions
+    #pragma anon_unions
 #endif
 
 
@@ -806,7 +809,7 @@ typedef struct
      * |        |          |Note1: The interrupt will occur when both PD_WU_STS and PD_WU_INT_EN are high.
      * |        |          |Note2: This bit is write protected bit. Refer to the REGWRPROT register.
      * |[6]     |PD_WU_STS |Power-down Mode Wake-up Interrupt Status
-     * |        |          |Set by "Power-down wake-up event", it indicates that resume from Power-down mode. 
+     * |        |          |Set by "Power-down wake-up event", it indicates that resume from Power-down mode.
      * |        |          |This bit can be cleared to 0 by software writing "1".
      * |        |          |Note: This bit is working only if PD_WU_INT_EN (PWRCON[5]) set to 1.
      * @var CLK_T::AHBCLK
@@ -2110,15 +2113,15 @@ typedef struct
     __IO uint32_t ADSPOVFR;      /* Offset: 0x54  A/D SAMPLE Start of Conversion Over Run Flag Register              */
     __IO uint32_t ADSPCRA[8];    /* Offset: 0x58~0x74 ADSPCRA0~7 A/D SAMPLEAn Control Register, n=0~7                */
     __IO uint32_t ADSPCRB[8];    /* Offset: 0x78~0x94 ADSPCRB0~7 A/D SAMPLEBn Control Register, n=0~7                */
-    __I  uint32_t RESERVE0[3];                                                                                         
+    __I  uint32_t RESERVE0[3];
     __IO uint32_t ADSMSELR;      /* Offset: 0xA4  A/D SAMPLE Simultaneous Mode Select Register                       */
     __IO uint32_t ADCMPR[2];     /* Offset: 0xA8~0xAC  A/D Result Compare Register 0/1                               */
     __I  uint32_t ADSR0;         /* Offset: 0xB0  A/D Status Register 0                                              */
     __IO uint32_t ADSR1;         /* Offset: 0xB4  A/D Status Register 1                                              */
     __IO uint32_t ADTCR;         /* Offset: 0xB8  A/D Timing Control Register                                        */
-    __I  uint32_t RESERVE1[17];                                                                                        
+    __I  uint32_t RESERVE1[17];
     __I  uint32_t ADDRDBA[4];    /* Offset: 0x100~0x10C  A/D Data Register Double Buffer for SAMPLE An, n=0~3        */
-    __I  uint32_t RESERVE2[4];                                                                                         
+    __I  uint32_t RESERVE2[4];
     __I  uint32_t ADDRDBB[4];    /* Offset: 0x120~0x12C  A/D Data Register Double Buffer for SAMPLE Bn, n=0~3        */
     __IO uint32_t ADDBM;         /* Offset: 0x130  A/D Double Buffer Mode select Register                            */
     __IO uint32_t ADINTSRCTL[4]; /* Offset: 0x134~0x140  A/D interrupt n Source Enable Control Register, n=0~3       */
@@ -3529,7 +3532,7 @@ typedef struct
      * |        |          |00 = Px.n is in input mode.
      * |        |          |01 = Px.n is in Push-pull Output mode.
      * |        |          |10 = Px.n is in Open-drain Output mode.
-     * |        |          |11 = Px.n is in Quasi-bidirectional mode. 
+     * |        |          |11 = Px.n is in Quasi-bidirectional mode.
      * |        |          |Note: Max. n = 1 for PA; Max. n = 7 for P0/P1/P2/P3/P4/P5/P6/P7/P8/P9.
      * @var GPIO_T::OFFD
      * Offset: 0x04  GPIO Port Digital Input Path Disable Control
@@ -5152,14 +5155,14 @@ typedef struct
      * |        |          |The RSTS_RESET flag is set by the "Reset Signal" from the nRESET pin to indicate the previous reset source.
      * |        |          |0 = No reset from the nRESET pin.
      * |        |          |1 = The nRESET pin had issued the reset signal to reset the system.
-     * |        |          |Note: This bit can be cleared to 0 by software writing "1".     
+     * |        |          |Note: This bit can be cleared to 0 by software writing "1".
      * |[2]     |RSTS_WDT  |Watchdog Reset Flag
      * |        |          |The RSTS_WDT flag is set by the "Reset Signal" from the Watchdog Timer to indicate the previous reset source
      * |        |          |0 = No reset from watchdog timer.
      * |        |          |1 = The watchdog timer had issued the reset signal to reset the system.
      * |        |          |Note1: This bit can be cleared to 0 by software writing "1".
-     * |        |          |Note2: Watchdog Timer register WTRF (WTCR[2]) bit is set if the system has been reset by WDT time-out reset. 
-     * |        |          |Window Watchdog Timer register WWDTRF (WWDTSR[1]) bit is set if the system has been reset by WWDT time-out reset.     
+     * |        |          |Note2: Watchdog Timer register WTRF (WTCR[2]) bit is set if the system has been reset by WDT time-out reset.
+     * |        |          |Window Watchdog Timer register WWDTRF (WWDTSR[1]) bit is set if the system has been reset by WWDT time-out reset.
      * |[3]     |RSTS_LVR  |Low Voltage Reset Flag
      * |        |          |The RSTS_LVR flag is set by the "Reset Signal" from the Low-Voltage-Reset controller to indicate the previous reset source.
      * |        |          |0 = No reset from LVR.
@@ -6436,8 +6439,8 @@ typedef struct
     * |Bits    |Field     |Descriptions
     * | :----: | :----:   | :---- |
     * |[7:0]   |DATA      |UART Data Register
-    * |        |          |By writing one byte to this register, the data byte will be stored in transmitter FIFO. 
-    * |        |          |The UART Controller will send out the data stored in transmitter FIFO top location through the UART_TXD pin (LSB first). 
+    * |        |          |By writing one byte to this register, the data byte will be stored in transmitter FIFO.
+    * |        |          |The UART Controller will send out the data stored in transmitter FIFO top location through the UART_TXD pin (LSB first).
     * |        |          |By reading this register, the UART will return an 8-bit data received from UART_RXD pin (LSB first).
     * @var UART_T::THR
     * Offset: 0x00  UART Transmit Holding Register
@@ -6445,8 +6448,8 @@ typedef struct
     * |Bits    |Field     |Descriptions
     * | :----: | :----:   | :---- |
     * |[7:0]   |THR       |Transmit Holding Register
-    * |        |          |By writing one byte to this register, the data byte will be stored in transmitter FIFO. 
-    * |        |          |The UART Controller will send out the data stored in transmitter FIFO top location through the UART_TXD pin (LSB first). 
+    * |        |          |By writing one byte to this register, the data byte will be stored in transmitter FIFO.
+    * |        |          |The UART Controller will send out the data stored in transmitter FIFO top location through the UART_TXD pin (LSB first).
     * @var UART_T::RBR
     * Offset: 0x00  UART Receive Buffer Register
     * ---------------------------------------------------------------------------------------------------
@@ -6707,8 +6710,8 @@ typedef struct
     * |        |          |1 = Buffer error interrupt flag is generated.
     * |        |          |Note: This bit is read only and reset to 0 when all bits of TX_OVER_IF (UA_FSR[24]) and RX_OVER_IF (UA_FSR[0]) are cleared.
     * |[7]     |LIN_IF    |LIN Bus Interrupt Flag (Read Only)
-    * |        |          |This bit is set when LIN slave header detect (LINS_HDET_F (UA_LIN_SR[0]) = 1), LIN break detect (LIN_BKDET_F (UA_LIN_SR[8]) = 1), bit error detect (BIT_ERR_F (UA_LIN_SR[9]) = 1), LIN slave ID parity error (LINS_IDPERR_F (UA_LIN_SR[2]) = 1) or LIN slave header error detect (LINS_HERR_F (UA_LIN_SR[1]) = 1). 
-    * |        |          |If LIN_IEN (UA_IER[8]) is enabled the LIN interrupt will be generated.    
+    * |        |          |This bit is set when LIN slave header detect (LINS_HDET_F (UA_LIN_SR[0]) = 1), LIN break detect (LIN_BKDET_F (UA_LIN_SR[8]) = 1), bit error detect (BIT_ERR_F (UA_LIN_SR[9]) = 1), LIN slave ID parity error (LINS_IDPERR_F (UA_LIN_SR[2]) = 1) or LIN slave header error detect (LINS_HERR_F (UA_LIN_SR[1]) = 1).
+    * |        |          |If LIN_IEN (UA_IER[8]) is enabled the LIN interrupt will be generated.
     * |        |          |0 = None of LINS_HDET_F, LIN_BKDET_F, BIT_ERR_F, LINS_IDPERR_F and LINS_HERR_F is generated.
     * |        |          |1 = At least one of LINS_HDET_F, LIN_BKDET_F, BIT_ERR_F, LINS_IDPERR_F and LINS_HERR_F is generated.
     * |        |          |Note: This bit is cleared when LINS_HDET_F, LIN_BKDET_F, BIT_ERR_F, LINS_IDPENR_F and LINS_HERR_F all are cleared.
@@ -6846,15 +6849,15 @@ typedef struct
     * |        |          |If the LIN_IEN (UA_IER[8]) = 1, an interrupt will be generated.
     * |[2]     |LINS_ARS_EN|LIN Slave Automatic Resynchronization Mode Enable Control
     * |        |          |0 = LIN automatic resynchronization Disabled.
-    * |        |          |1 = LIN automatic resynchronization Enabled.    
+    * |        |          |1 = LIN automatic resynchronization Enabled.
     * |        |          |Note1: This bit only valid when in LIN slave mode (LINS_EN (UA_LIN_CTL[0]) = 1).
     * |        |          |Note2: When operation in Automatic Resynchronization mode, the baud rate setting must be mode2 (DIV_X_EN (UA_BAUD[29]) and DIV_X_ONE (UA_BAUD[28]) must be 1).
     * |        |          |Note3: The control and interactions of this field are explained in Slave mode with automatic resynchronization section.
     * |[3]     |LINS_DUM_EN|LIN Slave Divider Update Method Enable Control
     * |        |          |0 = UA_BAUD updated is written by software (if no automatic resynchronization update occurs at the same time).
-    * |        |          |1 = UA_BAUD is updated at the next received character. User must set the bit before checksum reception.   
+    * |        |          |1 = UA_BAUD is updated at the next received character. User must set the bit before checksum reception.
     * |        |          |Note1: This bit only valid when in LIN slave mode (LINS_EN (UA_LIN_CTL[0]) = 1).
-    * |        |          |Note2: This bit is used for LIN Slave Automatic Resynchronization mode. (for Non-Automatic Resynchronization mode, this bit should be kept cleared) 
+    * |        |          |Note2: This bit is used for LIN Slave Automatic Resynchronization mode. (for Non-Automatic Resynchronization mode, this bit should be kept cleared)
     * |        |          |Note3: The control and interactions of this field are explained in Slave mode with automatic resynchronization section.
     * |[4]     |LIN_MUTE_EN|LIN Mute Mode Enable Control
     * |        |          |0 = LIN mute mode Disabled.
@@ -6864,7 +6867,7 @@ typedef struct
     * |        |          |The LIN TX header can be "break field" or "break and sync field" or "break, sync and frame ID field", it is depend on setting LIN_HEAD_SEL (UA_LIN_CTL[23:22]).
     * |        |          |0 = Send LIN TX header Disabled.
     * |        |          |1 = Send LIN TX header Enabled.
-    * |        |          |Note1: Tis bit is shadow bit of LIN_TX_EN (UA_ALT_CSR[7]); user can read/write it by setting LIN_TX_EN (UA_ALT_CSR[7]) or LIN_SHD (UA_LIN_CTL[8]).    
+    * |        |          |Note1: Tis bit is shadow bit of LIN_TX_EN (UA_ALT_CSR[7]); user can read/write it by setting LIN_TX_EN (UA_ALT_CSR[7]) or LIN_SHD (UA_LIN_CTL[8]).
     * |        |          |Note2: When transmitter header field (it may be "break" or "break + sync" or "break + sync + frame ID" selected by LIN_HEAD_SEL (UA_LIN_CTL[23:22]) field) transfer operation finished, this bit will be cleared automatically.
     * |[9]     |LIN_IDPEN |LIN ID Parity Enable Control
     * |        |          |0 = LIN frame ID parity Disabled.
@@ -7853,7 +7856,7 @@ typedef volatile unsigned long  vu32;       ///< Define 32-bit unsigned volatile
 
 #define E_SUCCESS   0
 #ifndef NULL
-#define NULL        0
+    #define NULL        0
 #endif
 
 #define TRUE        1
@@ -7933,6 +7936,3 @@ typedef volatile unsigned long  vu32;       ///< Define 32-bit unsigned volatile
 #include "opa.h"
 #include "ecap.h"
 #endif
-
-
-

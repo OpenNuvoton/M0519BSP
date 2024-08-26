@@ -84,6 +84,8 @@ void ACMP_IRQHandler(void)
 
 void SYS_Init(void)
 {
+    uint32_t u32TimeOutCnt;
+
     /*---------------------------------------------------------------------------------------------------------*/
     /* Init System Clock                                                                                       */
     /*---------------------------------------------------------------------------------------------------------*/
@@ -92,7 +94,9 @@ void SYS_Init(void)
     CLK->PWRCON |= CLK_PWRCON_XTL12M_EN_Msk;
 
     /* Waiting for clock ready */
-    while(!(CLK->CLKSTATUS & CLK_CLKSTATUS_XTL12M_STB_Msk));
+    u32TimeOutCnt = __HIRC;
+    while(!(CLK->CLKSTATUS & CLK_CLKSTATUS_XTL12M_STB_Msk))
+		if(--u32TimeOutCnt == 0) break;
 
     /* Select HXT as the clock source of UART */
     CLK->CLKSEL1 &= (~CLK_CLKSEL1_UART_S_Msk);
@@ -108,15 +112,15 @@ void SYS_Init(void)
     /*---------------------------------------------------------------------------------------------------------*/
     /* Init I/O Multi-function                                                                                 */
     /*---------------------------------------------------------------------------------------------------------*/
-		/* Set P8.4 and P8.7 multi-function configuration as ACMP0 positive input pin (ACMP0_P) and ACMP0 output pin (ACMP0_O). */
-		SYS->P8_MFP &= ~(SYS_MFP_P87_Msk | SYS_MFP_P84_Msk);
-		SYS->P8_MFP |= (SYS_MFP_P87_ACMP0_O | SYS_MFP_P84_ACMP0_P);
+    /* Set P8.4 and P8.7 multi-function configuration as ACMP0 positive input pin (ACMP0_P) and ACMP0 output pin (ACMP0_O). */
+    SYS->P8_MFP &= ~(SYS_MFP_P87_Msk | SYS_MFP_P84_Msk);
+    SYS->P8_MFP |= (SYS_MFP_P87_ACMP0_O | SYS_MFP_P84_ACMP0_P);
     /* Disable digital input path of analog pin ACMP0_P (P8.4) to prevent leakage */
     GPIO_DISABLE_DIGITAL_PATH(P8, BIT4);
 
     /* Set P3 multi-function pins for UART0 RXD and TXD */
-		SYS->P3_MFP &= ~(SYS_MFP_P30_Msk | SYS_MFP_P31_Msk);
-		SYS->P3_MFP |= (SYS_MFP_P30_UART0_RXD | SYS_MFP_P31_UART0_TXD);
+    SYS->P3_MFP &= ~(SYS_MFP_P30_Msk | SYS_MFP_P31_Msk);
+    SYS->P3_MFP |= (SYS_MFP_P30_UART0_RXD | SYS_MFP_P31_UART0_TXD);
 }
 
 void UART_Init(void)
@@ -151,5 +155,3 @@ void PowerDownFunction(void)
 }
 
 /*** (C) COPYRIGHT 2014 Nuvoton Technology Corp. ***/
-
-

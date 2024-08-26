@@ -36,7 +36,7 @@ __root const uint32_t g_funcTable[4] =
 } ;
 #else
 #if defined(__GNUC_LD_IAP__)
-const uint32_t __attribute__((section (".IAPFunTable"))) g_funcTable[4] =
+const uint32_t __attribute__((section(".IAPFunTable"))) g_funcTable[4] =
 {
     (uint32_t)IAP_Func0, (uint32_t)IAP_Func1, (uint32_t)IAP_Func2, (uint32_t)IAP_Func3
 };
@@ -48,7 +48,7 @@ const uint32_t * __attribute__((section(".ARM.__at_0x00100E00"))) g_funcTable[4]
 #endif
 #endif
 
-void ProcessHardFault(void){}
+void ProcessHardFault(void) {}
 
 void SysTickDelay(uint32_t us)
 {
@@ -62,6 +62,8 @@ void SysTickDelay(uint32_t us)
 
 void SYS_Init(void)
 {
+    uint32_t u32TimeOutCnt;
+
     int32_t i;
     /*---------------------------------------------------------------------------------------------------------*/
     /* Init System Clock                                                                                       */
@@ -167,11 +169,11 @@ int32_t IAP_Func2(int32_t n)
 
     for(i = 0; i < n; i++)
     {
-    	printf("Hello IAP2! #%d\n", i);
+        printf("Hello IAP2! #%d\n", i);
     }
 
     return n;
-#endif    
+#endif
 }
 int32_t IAP_Func3(int32_t n)
 {
@@ -182,11 +184,11 @@ int32_t IAP_Func3(int32_t n)
 
     for(i = 0; i < n; i++)
     {
-    	printf("Hello IAP3! #%d\n", i);
+        printf("Hello IAP3! #%d\n", i);
     }
 
     return n;
-#endif    
+#endif
 }
 
 /*---------------------------------------------------------------------------------------------------------*/
@@ -240,7 +242,3 @@ int32_t main(void)
 
 #endif
 }
-
-
-
-
